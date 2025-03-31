@@ -29,7 +29,7 @@ export class RTCService {
   }
 
   // 加入频道
-  async joinChannel(channelName, token) {
+  async joinChannel(mirrorCode,channelName, token) {
     try {
       if (!this.client) {
         throw new Error('RTC client not initialized');
@@ -56,7 +56,7 @@ export class RTCService {
       this.messageHandlers.get('status')?.(`正在加入频道: ${channelName}`);
 
       // 加入频道
-      const uid = await this.client.join(this.appId, channelName, token);
+      const uid = await this.client.join(this.appId, channelName, token,parseInt(mirrorCode),null);
       console.log('成功加入频道，用户ID:', uid);
       this.messageHandlers.get('status')?.(`成功加入频道，用户ID: ${uid}`);
 

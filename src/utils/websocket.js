@@ -14,6 +14,7 @@ export class WebSocketService {
     this.pingTimeout = 50000; // 50秒内没有收到PONG就认为连接断开
     this.pingCheckTimer = null;
     this.rtcService = null; // 添加RTC服务引用
+    this.mirrorCode = 0;
   }
 
   // 设置RTC服务
@@ -22,13 +23,14 @@ export class WebSocketService {
   }
 
   // 连接WebSocket
-  connect(auth) {
+  connect(auth,mirrorCode) {
     if (this.ws) {
       this.disconnect();
     }
 
     this.auth = auth;
     this.status = 'connecting';
+    this.mirrorCode = mirrorCode;
 
     // 创建WebSocket实例，将auth作为URL参数传递
     this.ws = new WebSocket(`wss://aw.aoscdn.com/base/support/apowermirror?auth=${encodeURIComponent(auth)}`);
@@ -78,7 +80,7 @@ export class WebSocketService {
         if (data.status === 110) {
           // 加入声网频道
           if (this.rtcService) {
-            debugger
+
             const channel_name = data.data['channel_name']
             const token = data.data['token']
 
@@ -103,7 +105,7 @@ export class WebSocketService {
             }
 
             // 加入频道
-            this.rtcService.joinChannel(channel_name, token)
+            this.rtcService.joinChannel(mirrorCode,channel_name, token)
               .then(success => {
                 if (success) {
                   console.log('成功加入声网频道');

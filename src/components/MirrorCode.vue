@@ -153,7 +153,7 @@ export default {
         wsService.setRTCService(rtcService);
 
         // 6. 连接WebSocket
-        wsService.connect(authToken.value);
+        wsService.connect(authToken.value,mirrorCode.value);
       } catch (error) {
         console.error('Start mirror error:', error);
         ElMessage.error(error.message || '启动镜像失败');
@@ -169,7 +169,7 @@ export default {
       // 处理频道分配消息
       if (data.status === 110) {
         const { channel_name, token } = data.data;
-        rtcService.joinChannel(channel_name, token);
+        rtcService.joinChannel(mirrorCode.value,channel_name, token);
       }
       
       // 处理停止分享消息
